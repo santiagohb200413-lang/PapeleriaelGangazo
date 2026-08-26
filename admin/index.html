@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de administración</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="ic-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+  <symbol id="ic-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><line x1="12" y1="13" x2="12" y2="21"/></symbol>
+  <symbol id="ic-tag" viewBox="0 0 24 24"><path d="M20.6 12.6L12 21.2 2.8 12A2 2 0 012.2 10.6L3.4 3.4 10.6 2.2A2 2 0 0112 2.8L20.6 11.4a2 2 0 010 2.8z"/><circle cx="8" cy="8" r="1.2"/></symbol>
+  <symbol id="ic-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+  <symbol id="ic-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+  <symbol id="ic-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  <symbol id="ic-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="ic-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="ic-eye-off" viewBox="0 0 24 24"><path d="M17.9 17.9A10.6 10.6 0 0112 19c-7 0-11-7-11-7a19 19 0 015.1-5.6M9.9 4.2A9.8 9.8 0 0112 4c7 0 11 7 11 7a18.6 18.6 0 01-2.5 3.4"/><path d="M9.5 9.5a3 3 0 004.2 4.2"/><line x1="2" y1="2" x2="22" y2="22"/></symbol>
+  <symbol id="ic-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></symbol>
+  <symbol id="ic-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></symbol>
+  <symbol id="ic-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></symbol>
+  <symbol id="ic-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></symbol>
+  <symbol id="ic-book" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="3" x2="8" y2="21"/></symbol>
+  <symbol id="ic-pencil" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></symbol>
+  <symbol id="ic-drop" viewBox="0 0 24 24"><path d="M12 2s7 7.5 7 12a7 7 0 01-14 0c0-4.5 7-12 7-12z"/></symbol>
+  <symbol id="ic-briefcase" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></symbol>
+  <symbol id="ic-bag" viewBox="0 0 24 24"><path d="M6 8a3 3 0 016 0"/><rect x="4" y="8" width="16" height="13" rx="2"/></symbol>
+  <symbol id="ic-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="1"/><rect x="3" y="8" width="18" height="4"/><line x1="12" y1="8" x2="12" y2="21"/></symbol>
+  <symbol id="ic-ruler" viewBox="0 0 24 24"><path d="M3 16l5-5 13 13-5 5z"/><line x1="10.5" y1="8.5" x2="12.5" y2="10.5"/><line x1="13.5" y1="5.5" x2="15.5" y2="7.5"/></symbol>
+  <symbol id="ic-printer" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><rect x="6" y="14" width="12" height="8"/><path d="M2 9h20v7h-4"/></symbol>
+</svg>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo" id="sb-logo">--</div>
+      <div>
+        <div class="sb-name" id="sb-name-texto">Panel admin</div>
+        <div class="sb-sub">Administración</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <button class="sb-item active" data-seccion="productos"><svg class="icon"><use href="#ic-box"/></svg>Productos</button>
+      <button class="sb-item" data-seccion="categorias"><svg class="icon"><use href="#ic-tag"/></svg>Categorías</button>
+      <button class="sb-item" data-seccion="configuracion"><svg class="icon"><use href="#ic-settings"/></svg>Configuración</button>
+    </nav>
+    <div class="sb-footer">
+      <button class="sb-item" onclick="cerrarSesion()"><svg class="icon"><use href="#ic-logout"/></svg>Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="titulo-seccion">Productos</h1>
+        <div class="topbar-sub" id="subtitulo-seccion">Gestiona el catálogo que ven tus clientes</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ---------- SECCIÓN PRODUCTOS ---------- -->
+      <section class="section active" id="seccion-productos">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Productos</h2>
+            <div class="panel-tools">
+              <div class="search-mini">
+                <svg><use href="#ic-search"/></svg>
+                <input type="text" id="buscador-productos" placeholder="Buscar producto...">
+              </div>
+              <button class="btn btn-primary" onclick="abrirModalProducto()"><svg class="icon" style="width:15px;height:15px"><use href="#ic-plus"/></svg>Nuevo producto</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="tbody-productos"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ---------- SECCIÓN CATEGORÍAS ---------- -->
+      <section class="section" id="seccion-categorias">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Categorías</h2>
+            <button class="btn btn-primary" onclick="abrirModalCategoria()"><svg class="icon" style="width:15px;height:15px"><use href="#ic-plus"/></svg>Nueva categoría</button>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Categoría</th><th>Orden</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="tbody-categorias"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ---------- SECCIÓN CONFIGURACIÓN ---------- -->
+      <section class="section" id="seccion-configuracion">
+        <div class="panel">
+          <div class="panel-head"><h2>Configuración de la tienda</h2></div>
+          <form id="form-configuracion" style="padding:20px;max-width:480px;">
+            <div class="field">
+              <label>Logo</label>
+              <div class="img-drop" onclick="document.getElementById('input-logo').click()">
+                <div class="img-preview" id="logo-preview"></div>
+                <div>Click para subir logo</div>
+                <div class="img-hint">Se optimiza automáticamente a WebP</div>
+              </div>
+              <input type="file" id="input-logo" accept="image/*" style="display:none">
+            </div>
+            <div class="field"><label>Nombre del negocio</label><input type="text" id="cfg-nombre" required></div>
+            <div class="field"><label>Descripción / tagline</label><input type="text" id="cfg-descripcion"></div>
+            <div class="row-2">
+              <div class="field"><label>Teléfono</label><input type="text" id="cfg-telefono"></div>
+              <div class="field"><label>WhatsApp (con indicativo, sin +)</label><input type="text" id="cfg-whatsapp" placeholder="573001234567"></div>
+            </div>
+            <div class="field"><label>Mensaje del banner</label><textarea id="cfg-banner"></textarea></div>
+            <button type="submit" class="btn btn-primary" id="btn-guardar-configuracion">Guardar cambios</button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ---------- MODAL PRODUCTO ---------- -->
+<div class="modal-overlay" id="modal-producto">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-producto-titulo">Nuevo producto</h3>
+      <button class="modal-close" onclick="cerrarModalProducto()">✕</button>
+    </div>
+    <form id="form-producto">
+      <div class="modal-body">
+        <div class="field">
+          <label>Imagen</label>
+          <div class="img-drop" onclick="document.getElementById('input-imagen-producto').click()">
+            <div class="img-preview" id="img-preview"></div>
+            <div>Click para subir imagen</div>
+            <div class="img-hint">Se optimiza automáticamente a WebP</div>
+          </div>
+          <input type="file" id="input-imagen-producto" accept="image/*" style="display:none">
+        </div>
+        <div class="field"><label>Nombre</label><input type="text" id="prod-nombre" required></div>
+        <div class="field"><label>Descripción</label><textarea id="prod-descripcion"></textarea></div>
+        <div class="field"><label>Categoría</label><select id="prod-categoria"></select></div>
+        <div class="row-2">
+          <div class="field"><label>Precio</label><input type="number" id="prod-precio" min="0"></div>
+          <div class="field"><label>Precio mayorista</label><input type="number" id="prod-precio-mayorista" min="0"></div>
+        </div>
+        <div class="field"><label>Cantidad mínima para precio mayorista</label><input type="number" id="prod-cantidad-mayorista" min="1"></div>
+        <div class="switch-field">
+          <label class="switch"><input type="checkbox" id="prod-activo" checked><span class="switch-track"></span></label>
+          <span>Producto visible en el catálogo</span>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" onclick="cerrarModalProducto()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-guardar-producto">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ---------- MODAL CATEGORÍA ---------- -->
+<div class="modal-overlay" id="modal-categoria">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-categoria-titulo">Nueva categoría</h3>
+      <button class="modal-close" onclick="cerrarModalCategoria()">✕</button>
+    </div>
+    <form id="form-categoria">
+      <div class="modal-body">
+        <div class="field"><label>Nombre</label><input type="text" id="cat-nombre" required></div>
+        <div class="field">
+          <label>Ícono</label>
+          <div class="icon-select-grid" id="icon-select-grid"></div>
+        </div>
+        <div class="field"><label>Orden</label><input type="number" id="cat-orden" value="0"></div>
+        <div class="switch-field">
+          <label class="switch"><input type="checkbox" id="cat-activo" checked><span class="switch-track"></span></label>
+          <span>Categoría activa</span>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-secondary" onclick="cerrarModalCategoria()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-guardar-categoria">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/imagenes.js"></script>
+<script>
+  function mostrarToast(mensaje) {
+    const toast = document.getElementById('toast');
+    toast.textContent = mensaje;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // navegación entre secciones
+  const NOMBRES_SECCION = {
+    productos: ['Productos', 'Gestiona el catálogo que ven tus clientes'],
+    categorias: ['Categorías', 'Organiza tus productos por categoría'],
+    configuracion: ['Configuración', 'Datos generales de la tienda']
+  };
+
+  document.querySelectorAll('.sb-item[data-seccion]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sb-item[data-seccion]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(`seccion-${btn.dataset.seccion}`).classList.add('active');
+
+      const [titulo, sub] = NOMBRES_SECCION[btn.dataset.seccion];
+      document.getElementById('titulo-seccion').textContent = titulo;
+      document.getElementById('subtitulo-seccion').textContent = sub;
+    });
+  });
+
+  async function iniciarPanel() {
+    const session = await exigirSesion();
+    if (!session) return;
+
+    await cargarConfiguracionAdmin();
+    await cargarCategoriasAdmin();
+    await cargarProductosAdmin();
+  }
+</script>
+<script src="js/categorias.js"></script>
+<script src="js/productos.js"></script>
+<script src="js/configuracion.js"></script>
+<script>
+  iniciarPanel();
+</script>
+
+</body>
+</html>
