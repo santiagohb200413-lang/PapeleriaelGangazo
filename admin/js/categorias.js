@@ -108,9 +108,9 @@ async function guardarCategoria(e) {
 
   let error;
   if (CATEGORIA_EDITANDO) {
-    ({ error } = await supabase.from('categorias').update(payload).eq('id', CATEGORIA_EDITANDO));
+    ({ error } = await sb.from('categorias').update(payload).eq('id', CATEGORIA_EDITANDO));
   } else {
-    ({ error } = await supabase.from('categorias').insert(payload));
+    ({ error } = await sb.from('categorias').insert(payload));
   }
 
   btn.disabled = false;
@@ -135,7 +135,7 @@ async function eliminarCategoria(id) {
 
   if (!confirm(mensaje)) return;
 
-  const { error } = await supabase.from('categorias').delete().eq('id', id);
+  const { error } = await sb.from('categorias').delete().eq('id', id);
   if (error) {
     mostrarToast('Error eliminando la categoría');
     console.error(error);

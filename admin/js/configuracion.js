@@ -5,7 +5,7 @@
 let LOGO_NUEVO_BLOB = null;
 
 async function cargarConfiguracionAdmin() {
-  const { data, error } = await supabase.from('configuracion').select('*').eq('id', 1).single();
+  const { data, error } = await sb.from('configuracion').select('*').eq('id', 1).single();
   if (error) {
     mostrarToast('Error cargando la configuración');
     console.error(error);
@@ -66,7 +66,7 @@ async function guardarConfiguracion(e) {
       payload.logo_url = await subirImagen(LOGO_NUEVO_BLOB, 'logo-tienda');
     }
 
-    const { error } = await supabase.from('configuracion').update(payload).eq('id', 1);
+    const { error } = await sb.from('configuracion').update(payload).eq('id', 1);
     if (error) throw error;
 
     mostrarToast('Configuración guardada');

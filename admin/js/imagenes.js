@@ -63,7 +63,7 @@ function optimizarImagen(file) {
 async function subirImagen(blob, nombreBase) {
   const nombreArchivo = `${nombreBase}-${Date.now()}.webp`;
 
-  const { error } = await supabase.storage
+  const { error } = await sb.storage
     .from('productos')
     .upload(nombreArchivo, blob, {
       contentType: 'image/webp',
@@ -72,6 +72,6 @@ async function subirImagen(blob, nombreBase) {
 
   if (error) throw error;
 
-  const { data } = supabase.storage.from('productos').getPublicUrl(nombreArchivo);
+  const { data } = sb.storage.from('productos').getPublicUrl(nombreArchivo);
   return data.publicUrl;
 }

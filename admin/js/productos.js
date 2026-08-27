@@ -156,9 +156,9 @@ async function guardarProducto(e) {
 
     let error;
     if (PRODUCTO_EDITANDO) {
-      ({ error } = await supabase.from('productos').update(payload).eq('id', PRODUCTO_EDITANDO));
+      ({ error } = await sb.from('productos').update(payload).eq('id', PRODUCTO_EDITANDO));
     } else {
-      ({ error } = await supabase.from('productos').insert(payload));
+      ({ error } = await sb.from('productos').insert(payload));
     }
 
     if (error) throw error;
@@ -176,7 +176,7 @@ async function guardarProducto(e) {
 }
 
 async function alternarVisibilidadProducto(id, activoActual) {
-  const { error } = await supabase.from('productos').update({ activo: !activoActual }).eq('id', id);
+  const { error } = await sb.from('productos').update({ activo: !activoActual }).eq('id', id);
   if (error) {
     mostrarToast('Error actualizando el producto');
     console.error(error);
@@ -188,7 +188,7 @@ async function alternarVisibilidadProducto(id, activoActual) {
 async function eliminarProducto(id) {
   if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
 
-  const { error } = await supabase.from('productos').delete().eq('id', id);
+  const { error } = await sb.from('productos').delete().eq('id', id);
   if (error) {
     mostrarToast('Error eliminando el producto');
     console.error(error);
