@@ -12,7 +12,7 @@ let CATEGORIA_EDITANDO = null;
 let ICONO_SELECCIONADO = ICONOS_DISPONIBLES[0];
 
 async function cargarCategoriasAdmin() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('categorias')
     .select('*')
     .order('orden', { ascending: true });

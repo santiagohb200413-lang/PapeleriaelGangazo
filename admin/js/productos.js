@@ -9,7 +9,7 @@ let IMAGEN_URL_ACTUAL = null;
 let TEXTO_BUSQUEDA_ADMIN = '';
 
 async function cargarProductosAdmin() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('productos')
     .select('*, categorias(nombre, icono)')
     .order('created_at', { ascending: false });

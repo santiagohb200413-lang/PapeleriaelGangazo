@@ -29,7 +29,7 @@ function formatoPrecio(valor) {
 
 // ---------- CARGA DE CONFIGURACIÓN (nombre, logo, whatsapp, banner) ----------
 async function cargarConfiguracion() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('configuracion')
     .select('*')
     .eq('id', 1)
@@ -65,7 +65,7 @@ async function cargarConfiguracion() {
 
 // ---------- CARGA DE CATEGORÍAS ----------
 async function cargarCategorias() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('categorias')
     .select('*')
     .eq('activo', true)
@@ -108,7 +108,7 @@ function renderizarCategorias() {
 
 // ---------- CARGA DE PRODUCTOS ----------
 async function cargarProductos() {
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('productos')
     .select('*, categorias(nombre, icono)')
     .eq('activo', true)
