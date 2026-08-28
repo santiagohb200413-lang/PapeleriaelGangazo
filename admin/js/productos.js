@@ -53,10 +53,10 @@ function renderizarTablaProductos() {
         <td>
           <div class="prod-cell">
             <div class="prod-thumb">${thumb}</div>
-            <div class="prod-name">${p.nombre}</div>
+            <div class="prod-name">${escapar(p.nombre)}</div>
           </div>
         </td>
-        <td><span class="cat-pill">${p.categorias?.nombre || 'Sin categoría'}</span></td>
+        <td><span class="cat-pill">${escapar(p.categorias?.nombre) || 'Sin categoría'}</span></td>
         <td>${p.precio !== null && p.precio !== undefined ? '$' + Number(p.precio).toLocaleString('es-CO') : '—'}</td>
         <td>
           ${p.activo

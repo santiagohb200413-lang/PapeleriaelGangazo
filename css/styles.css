@@ -4,6 +4,7 @@
   --card:#FFFFFF;
   --ink:#20242E;
   --ink-soft:#6B7280;
+  --marca:#20242E;
   --teal:#0F8B8D;
   --teal-dark:#0B6668;
   --teal-tint:#E3EEED;
@@ -35,7 +36,7 @@ header{background:var(--card);border-bottom:1px solid var(--paper-line);position
 .brand{display:flex;align-items:center;gap:12px;}
 .logo{
   width:46px;height:46px;border-radius:10px;
-  background:var(--ink);color:#fff;
+  background:var(--marca);color:#fff;
   display:flex;align-items:center;justify-content:center;
   font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;
   flex-shrink:0;overflow:hidden;
@@ -53,7 +54,7 @@ header{background:var(--card);border-bottom:1px solid var(--paper-line);position
 .wa-btn svg{width:18px;height:18px;fill:#fff;stroke:none;flex-shrink:0;}
 
 .banner{
-  background:var(--ink);color:#fff;
+  background:var(--marca);color:#fff;
   text-align:center;padding:8px 12px;
   font-size:12.5px;font-weight:500;letter-spacing:.01em;
 }
@@ -92,7 +93,7 @@ header{background:var(--card);border-bottom:1px solid var(--paper-line);position
   background:var(--slate-tint);color:var(--slate);
 }
 .cat-chip .icon-circle svg{width:14px;height:14px;}
-.cat-chip.active{background:var(--ink);border-color:var(--ink);color:#fff;}
+.cat-chip.active{background:var(--marca);border-color:var(--marca);color:#fff;}
 .cat-chip.active .icon-circle{background:rgba(255,255,255,.15);color:#fff;}
 
 /* ---------- PRODUCTS ---------- */
@@ -161,10 +162,15 @@ footer{margin-top:34px;padding:22px 20px 10px;text-align:center;}
 .detalle-img svg{width:64px;height:64px;color:var(--slate);}
 .detalle-img img{width:100%;height:100%;object-fit:cover;}
 .detalle-body{padding:20px 22px 24px;}
-.detalle-nombre{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:700;margin:6px 0 10px;line-height:1.25;}
-.detalle-desc{font-size:14px;color:var(--ink-soft);line-height:1.55;margin-bottom:14px;}
-.detalle-precio{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;}
-.detalle-wa{margin-top:18px;width:100%;justify-content:center;}
+.detalle-fila{margin-bottom:12px;}
+.detalle-label{
+  display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--ink-soft);margin-bottom:3px;
+}
+.detalle-valor{font-size:14.5px;color:var(--ink);line-height:1.5;}
+.detalle-nombre{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;}
+.detalle-precio{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;}
+.detalle-wa{margin-top:10px;width:100%;justify-content:center;}
 
 @media (max-width:480px){
   .brand-name{font-size:17px;}

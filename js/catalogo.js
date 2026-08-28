@@ -17,6 +17,14 @@ function normalizar(texto) {
   return (texto || '').toString().toLowerCase();
 }
 
+// Evita que texto guardado en la base de datos (nombre, descripción, etc.)
+// se interprete como HTML/código al mostrarlo en la página.
+function escapar(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto ?? '';
+  return div.innerHTML;
+}
+
 function linkWhatsApp(numero, mensaje) {
   const limpio = (numero || '').replace(/[^0-9]/g, '');
   return `https://wa.me/${limpio}?text=${encodeURIComponent(mensaje)}`;
@@ -46,6 +54,10 @@ async function cargarConfiguracion() {
   document.getElementById('brand-tag').textContent = data.descripcion || '';
   document.getElementById('banner').textContent = data.mensaje_banner || '';
   document.title = data.nombre_negocio || 'Catálogo';
+
+  if (data.color_primario) {
+    document.documentElement.style.setProperty('--marca', data.color_primario);
+  }
 
   const logoEl = document.getElementById('logo');
   if (data.logo_url) {
@@ -151,8 +163,12 @@ function renderizarProductos() {
 
   grid.innerHTML = lista.map(p => {
     const icono = p.categorias?.icono || ICONO_DEFAULT;
+    const nombreSeguro = escapar(p.nombre);
+    const descripcionSegura = escapar(p.descripcion);
+    const categoriaSegura = escapar(p.categorias?.nombre);
+
     const imagen = p.imagen_url
-      ? `<img src="${p.imagen_url}" alt="${p.nombre}">`
+      ? `<img src="${p.imagen_url}" alt="${nombreSeguro}">`
       : `<svg class="icon" viewBox="0 0 24 24" style="width:34px;height:34px;stroke-width:1.5"><use href="#${icono}"/></svg>`;
 
     const precioTexto = p.precio !== null && p.precio !== undefined
@@ -169,9 +185,9 @@ function renderizarProductos() {
       <div class="card" onclick="abrirDetalleProducto('${p.id}')">
         <div class="card-img">${imagen}</div>
         <div class="card-body">
-          <div class="card-cat">${p.categorias?.nombre || ''}</div>
-          <div class="card-name">${p.nombre}</div>
-          ${p.descripcion ? `<div class="card-desc">${p.descripcion}</div>` : ''}
+          <div class="card-cat">${categoriaSegura}</div>
+          <div class="card-name">${nombreSeguro}</div>
+          ${p.descripcion ? `<div class="card-desc">${descripcionSegura}</div>` : ''}
           ${precioTexto}
           ${precioMayorTexto}
           <a class="card-cta" href="${linkWhatsApp(WHATSAPP_NUMERO, mensajeWa)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
@@ -191,23 +207,30 @@ function abrirDetalleProducto(id) {
 
   const icono = p.categorias?.icono || ICONO_DEFAULT;
   document.getElementById('detalle-img').innerHTML = p.imagen_url
-    ? `<img src="${p.imagen_url}" alt="${p.nombre}">`
+    ? `<img src="${p.imagen_url}" alt="${escapar(p.nombre)}">`
     : `<svg viewBox="0 0 24 24"><use href="#${icono}"/></svg>`;
 
-  document.getElementById('detalle-cat').textContent = p.categorias?.nombre || '';
+  document.getElementById('detalle-cat').textContent = p.categorias?.nombre || 'Sin categoría';
   document.getElementById('detalle-nombre').textContent = p.nombre;
-  document.getElementById('detalle-desc').textContent = p.descripcion || '';
-  document.getElementById('detalle-desc').style.display = p.descripcion ? 'block' : 'none';
+
+  const descFila = document.getElementById('detalle-desc-fila');
+  if (p.descripcion) {
+    document.getElementById('detalle-desc').textContent = p.descripcion;
+    descFila.style.display = 'block';
+  } else {
+    descFila.style.display = 'none';
+  }
 
   document.getElementById('detalle-precio').textContent =
-    (p.precio !== null && p.precio !== undefined) ? formatoPrecio(p.precio) : '';
+    (p.precio !== null && p.precio !== undefined) ? formatoPrecio(p.precio) : 'Consultar precio';
 
-  const precioMayorEl = document.getElementById('detalle-precio-mayor');
+  const mayorFila = document.getElementById('detalle-mayor-fila');
   if (p.precio_mayorista && p.cantidad_minima_mayorista) {
-    precioMayorEl.textContent = `${formatoPrecio(p.precio_mayorista)} c/u desde ${p.cantidad_minima_mayorista} und.`;
-    precioMayorEl.style.display = 'block';
+    document.getElementById('detalle-precio-mayor').textContent =
+      `${formatoPrecio(p.precio_mayorista)} c/u comprando ${p.cantidad_minima_mayorista} unidades o más`;
+    mayorFila.style.display = 'block';
   } else {
-    precioMayorEl.style.display = 'none';
+    mayorFila.style.display = 'none';
   }
 
   const mensajeWa = `Hola, estoy interesado en este producto:\n\n*${p.nombre}*\n${p.precio ? formatoPrecio(p.precio) : ''}\n\n¿Podrían brindarme más información?`;

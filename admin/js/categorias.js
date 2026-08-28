@@ -41,7 +41,7 @@ function renderizarTablaCategorias() {
       <td>
         <div class="prod-cell">
           <div class="prod-thumb"><svg class="icon"><use href="#${cat.icono || 'ic-tag'}"/></svg></div>
-          <div class="prod-name">${cat.nombre}</div>
+          <div class="prod-name">${escapar(cat.nombre)}</div>
         </div>
       </td>
       <td>${cat.orden ?? 0}</td>

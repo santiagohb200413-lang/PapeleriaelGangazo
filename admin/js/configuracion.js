@@ -14,6 +14,7 @@ async function cargarConfiguracionAdmin() {
 
   document.getElementById('cfg-nombre').value = data.nombre_negocio || '';
   document.getElementById('cfg-descripcion').value = data.descripcion || '';
+  document.getElementById('cfg-color').value = data.color_primario || '#20242E';
   document.getElementById('cfg-telefono').value = data.telefono || '';
   document.getElementById('cfg-whatsapp').value = data.whatsapp || '';
   document.getElementById('cfg-banner').value = data.mensaje_banner || '';
@@ -57,6 +58,7 @@ async function guardarConfiguracion(e) {
     const payload = {
       nombre_negocio: document.getElementById('cfg-nombre').value.trim(),
       descripcion: document.getElementById('cfg-descripcion').value.trim() || null,
+      color_primario: document.getElementById('cfg-color').value,
       telefono: document.getElementById('cfg-telefono').value.trim() || null,
       whatsapp: document.getElementById('cfg-whatsapp').value.trim() || null,
       mensaje_banner: document.getElementById('cfg-banner').value.trim() || null

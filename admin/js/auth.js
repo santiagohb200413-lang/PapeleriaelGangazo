@@ -2,6 +2,14 @@
 // AUTENTICACIÓN DEL ADMIN
 // ============================================
 
+// Evita que texto guardado en la base de datos se interprete como HTML/código
+// al mostrarlo en pantalla (protección básica contra inyección de contenido).
+function escapar(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto ?? '';
+  return div.innerHTML;
+}
+
 // Si ya hay sesión activa, no dejar ver el login: mandar directo al panel
 async function redirigirSiYaHaySesion() {
   const { data } = await sb.auth.getSession();
