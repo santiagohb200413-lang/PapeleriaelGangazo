@@ -32,6 +32,16 @@ async function iniciarSesion(email, password) {
   return await sb.auth.signInWithPassword({ email, password });
 }
 
+async function enviarRecuperacion(email) {
+  return await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/admin/reset-password.html'
+  });
+}
+
+async function actualizarPassword(nuevaPassword) {
+  return await sb.auth.updateUser({ password: nuevaPassword });
+}
+
 async function cerrarSesion() {
   await sb.auth.signOut();
   window.location.href = 'login.html';

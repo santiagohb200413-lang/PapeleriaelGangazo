@@ -133,6 +133,16 @@
             <button type="submit" class="btn btn-primary" id="btn-guardar-configuracion">Guardar cambios</button>
           </form>
         </div>
+
+        <div class="panel" style="margin-top:20px;">
+          <div class="panel-head"><h2>Seguridad</h2></div>
+          <form id="form-cambiar-password" style="padding:20px;max-width:480px;">
+            <div class="field"><label>Correo de la cuenta</label><input type="text" id="sec-email" disabled></div>
+            <div class="field"><label>Nueva contraseña</label><input type="password" id="sec-password1" minlength="6" required autocomplete="new-password"></div>
+            <div class="field"><label>Confirmar nueva contraseña</label><input type="password" id="sec-password2" minlength="6" required autocomplete="new-password"></div>
+            <button type="submit" class="btn btn-secondary" id="btn-cambiar-password">Cambiar contraseña</button>
+          </form>
+        </div>
       </section>
 
     </div>
@@ -245,10 +255,43 @@
     const session = await exigirSesion();
     if (!session) return;
 
+    const emailInput = document.getElementById('sec-email');
+    if (emailInput) emailInput.value = session.user.email;
+
     await cargarConfiguracionAdmin();
     await cargarCategoriasAdmin();
     await cargarProductosAdmin();
   }
+
+  document.getElementById('form-cambiar-password').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btn-cambiar-password');
+    const p1 = document.getElementById('sec-password1').value;
+    const p2 = document.getElementById('sec-password2').value;
+
+    if (p1 !== p2) {
+      mostrarToast('Las contraseñas no coinciden');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+
+    const { error } = await actualizarPassword(p1);
+
+    btn.disabled = false;
+    btn.textContent = 'Cambiar contraseña';
+
+    if (error) {
+      mostrarToast('Error cambiando la contraseña');
+      console.error(error);
+      return;
+    }
+
+    mostrarToast('Contraseña actualizada');
+    document.getElementById('form-cambiar-password').reset();
+    document.getElementById('sec-email').value = (await sb.auth.getUser()).data.user.email;
+  });
 </script>
 <script src="js/categorias.js"></script>
 <script src="js/productos.js"></script>
