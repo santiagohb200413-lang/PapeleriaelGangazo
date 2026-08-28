@@ -3,6 +3,7 @@
 // ============================================
 
 let LOGO_NUEVO_BLOB = null;
+let LOGO_ELIMINADO = false;
 
 async function cargarConfiguracionAdmin() {
   const { data, error } = await sb.from('configuracion').select('*').eq('id', 1).single();
@@ -11,6 +12,9 @@ async function cargarConfiguracionAdmin() {
     console.error(error);
     return;
   }
+
+  LOGO_NUEVO_BLOB = null;
+  LOGO_ELIMINADO = false;
 
   document.getElementById('cfg-nombre').value = data.nombre_negocio || '';
   document.getElementById('cfg-descripcion').value = data.descripcion || '';
@@ -23,9 +27,16 @@ async function cargarConfiguracionAdmin() {
 
   // refleja el nombre/logo también en el sidebar del propio panel
   document.getElementById('sb-name-texto').textContent = data.nombre_negocio || 'Panel admin';
-  if (data.logo_url) {
-    document.getElementById('sb-logo').innerHTML = `<img src="${data.logo_url}" alt="">`;
-  }
+  document.getElementById('sb-logo').innerHTML = data.logo_url
+    ? `<img src="${data.logo_url}" alt="">`
+    : escapar((data.nombre_negocio || 'CA').substring(0, 2).toUpperCase());
+}
+
+function quitarLogo() {
+  LOGO_NUEVO_BLOB = null;
+  LOGO_ELIMINADO = true;
+  document.getElementById('input-logo').value = '';
+  actualizarPreviewLogo(null);
 }
 
 function actualizarPreviewLogo(url) {
@@ -41,6 +52,7 @@ async function manejarSeleccionLogo(e) {
 
   try {
     LOGO_NUEVO_BLOB = await optimizarImagen(file);
+    LOGO_ELIMINADO = false;
     actualizarPreviewLogo(URL.createObjectURL(LOGO_NUEVO_BLOB));
   } catch (err) {
     mostrarToast(err.message || 'No se pudo procesar la imagen');
@@ -66,6 +78,8 @@ async function guardarConfiguracion(e) {
 
     if (LOGO_NUEVO_BLOB) {
       payload.logo_url = await subirImagen(LOGO_NUEVO_BLOB, 'logo-tienda');
+    } else if (LOGO_ELIMINADO) {
+      payload.logo_url = null;
     }
 
     const { error } = await sb.from('configuracion').update(payload).eq('id', 1);
@@ -73,6 +87,7 @@ async function guardarConfiguracion(e) {
 
     mostrarToast('Configuración guardada');
     LOGO_NUEVO_BLOB = null;
+    LOGO_ELIMINADO = false;
     cargarConfiguracionAdmin();
   } catch (err) {
     mostrarToast('Error guardando la configuración');
