@@ -190,6 +190,17 @@ document.getElementById('buscador').addEventListener('input', (e) => {
   renderizarProductos();
 });
 
+// ---------- TIEMPO REAL ----------
+// Escucha cambios en Supabase (cuando el admin crea/edita/borra algo)
+// y refresca automáticamente sin que el usuario recargue la página.
+function suscribirseACambios() {
+  sb.channel('catalogo-cambios')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'productos' }, cargarProductos)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'categorias' }, cargarCategorias)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'configuracion' }, cargarConfiguracion)
+    .subscribe();
+}
+
 // ---------- INICIO ----------
 async function iniciar() {
   await Promise.all([
@@ -197,6 +208,7 @@ async function iniciar() {
     cargarCategorias(),
     cargarProductos()
   ]);
+  suscribirseACambios();
 }
 
 iniciar();
