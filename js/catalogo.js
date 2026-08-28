@@ -166,7 +166,7 @@ function renderizarProductos() {
     const mensajeWa = `Hola, estoy interesado en este producto:\n\n*${p.nombre}*\n${p.precio ? formatoPrecio(p.precio) : ''}\n\n¿Podrían brindarme más información?`;
 
     return `
-      <div class="card">
+      <div class="card" onclick="abrirDetalleProducto('${p.id}')">
         <div class="card-img">${imagen}</div>
         <div class="card-body">
           <div class="card-cat">${p.categorias?.nombre || ''}</div>
@@ -174,7 +174,7 @@ function renderizarProductos() {
           ${p.descripcion ? `<div class="card-desc">${p.descripcion}</div>` : ''}
           ${precioTexto}
           ${precioMayorTexto}
-          <a class="card-cta" href="${linkWhatsApp(WHATSAPP_NUMERO, mensajeWa)}" target="_blank" rel="noopener">
+          <a class="card-cta" href="${linkWhatsApp(WHATSAPP_NUMERO, mensajeWa)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
             <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.6.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.8-1.6-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.6-1.5-.8-2-.2-.5-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.7.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.5 5.2L2 22l4.9-1.4c1.5.8 3.2 1.3 5.1 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.1c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.2.9.9-3.1-.2-.3C3.5 14 3 12.5 3 11c0-5 4-9 9-9s9 4 9 9-4 9-9 9z"/></svg>
             Consultar
           </a>
@@ -184,10 +184,52 @@ function renderizarProductos() {
   }).join('');
 }
 
+// ---------- MODAL DE DETALLE DE PRODUCTO ----------
+function abrirDetalleProducto(id) {
+  const p = TODOS_LOS_PRODUCTOS.find(x => x.id === id);
+  if (!p) return;
+
+  const icono = p.categorias?.icono || ICONO_DEFAULT;
+  document.getElementById('detalle-img').innerHTML = p.imagen_url
+    ? `<img src="${p.imagen_url}" alt="${p.nombre}">`
+    : `<svg viewBox="0 0 24 24"><use href="#${icono}"/></svg>`;
+
+  document.getElementById('detalle-cat').textContent = p.categorias?.nombre || '';
+  document.getElementById('detalle-nombre').textContent = p.nombre;
+  document.getElementById('detalle-desc').textContent = p.descripcion || '';
+  document.getElementById('detalle-desc').style.display = p.descripcion ? 'block' : 'none';
+
+  document.getElementById('detalle-precio').textContent =
+    (p.precio !== null && p.precio !== undefined) ? formatoPrecio(p.precio) : '';
+
+  const precioMayorEl = document.getElementById('detalle-precio-mayor');
+  if (p.precio_mayorista && p.cantidad_minima_mayorista) {
+    precioMayorEl.textContent = `${formatoPrecio(p.precio_mayorista)} c/u desde ${p.cantidad_minima_mayorista} und.`;
+    precioMayorEl.style.display = 'block';
+  } else {
+    precioMayorEl.style.display = 'none';
+  }
+
+  const mensajeWa = `Hola, estoy interesado en este producto:\n\n*${p.nombre}*\n${p.precio ? formatoPrecio(p.precio) : ''}\n\n¿Podrían brindarme más información?`;
+  document.getElementById('detalle-wa').href = linkWhatsApp(WHATSAPP_NUMERO, mensajeWa);
+
+  document.getElementById('detalle-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarDetalleProducto() {
+  document.getElementById('detalle-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
 // ---------- BUSCADOR ----------
 document.getElementById('buscador').addEventListener('input', (e) => {
   TEXTO_BUSQUEDA = normalizar(e.target.value);
   renderizarProductos();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') cerrarDetalleProducto();
 });
 
 // ---------- TIEMPO REAL ----------
