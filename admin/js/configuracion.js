@@ -4,6 +4,8 @@
 
 let LOGO_NUEVO_BLOB = null;
 let LOGO_ELIMINADO = false;
+let BANNER_IMG_NUEVO_BLOB = null;
+let BANNER_IMG_ELIMINADO = false;
 
 async function cargarConfiguracionAdmin() {
   const { data, error } = await sb.from('configuracion').select('*').eq('id', 1).single();
@@ -15,6 +17,8 @@ async function cargarConfiguracionAdmin() {
 
   LOGO_NUEVO_BLOB = null;
   LOGO_ELIMINADO = false;
+  BANNER_IMG_NUEVO_BLOB = null;
+  BANNER_IMG_ELIMINADO = false;
 
   document.getElementById('cfg-nombre').value = data.nombre_negocio || '';
   document.getElementById('cfg-descripcion').value = data.descripcion || '';
@@ -24,6 +28,7 @@ async function cargarConfiguracionAdmin() {
   document.getElementById('cfg-banner').value = data.mensaje_banner || '';
 
   actualizarPreviewLogo(data.logo_url);
+  actualizarPreviewBannerImagen(data.banner_url);
 
   // refleja el nombre/logo también en el sidebar del propio panel
   document.getElementById('sb-name-texto').textContent = data.nombre_negocio || 'Panel admin';
@@ -44,6 +49,34 @@ function actualizarPreviewLogo(url) {
   preview.innerHTML = url
     ? `<img src="${url}" alt="">`
     : `<svg class="icon" style="width:26px;height:26px;color:var(--slate)"><use href="#ic-box"/></svg>`;
+}
+
+function actualizarPreviewBannerImagen(url) {
+  const preview = document.getElementById('banner-img-preview');
+  preview.innerHTML = url
+    ? `<img src="${url}" alt="" style="width:100%;height:100%;object-fit:cover;">`
+    : `<svg class="icon" style="width:26px;height:26px;color:var(--slate)"><use href="#ic-box"/></svg>`;
+}
+
+function quitarBannerImagen() {
+  BANNER_IMG_NUEVO_BLOB = null;
+  BANNER_IMG_ELIMINADO = true;
+  document.getElementById('input-banner-img').value = '';
+  actualizarPreviewBannerImagen(null);
+}
+
+async function manejarSeleccionBannerImagen(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  try {
+    BANNER_IMG_NUEVO_BLOB = await optimizarImagen(file);
+    BANNER_IMG_ELIMINADO = false;
+    actualizarPreviewBannerImagen(URL.createObjectURL(BANNER_IMG_NUEVO_BLOB));
+  } catch (err) {
+    mostrarToast(err.message || 'No se pudo procesar la imagen');
+    console.error(err);
+  }
 }
 
 async function manejarSeleccionLogo(e) {
@@ -82,12 +115,20 @@ async function guardarConfiguracion(e) {
       payload.logo_url = null;
     }
 
+    if (BANNER_IMG_NUEVO_BLOB) {
+      payload.banner_url = await subirImagen(BANNER_IMG_NUEVO_BLOB, 'banner-tienda');
+    } else if (BANNER_IMG_ELIMINADO) {
+      payload.banner_url = null;
+    }
+
     const { error } = await sb.from('configuracion').update(payload).eq('id', 1);
     if (error) throw error;
 
     mostrarToast('Configuración guardada');
     LOGO_NUEVO_BLOB = null;
     LOGO_ELIMINADO = false;
+    BANNER_IMG_NUEVO_BLOB = null;
+    BANNER_IMG_ELIMINADO = false;
     cargarConfiguracionAdmin();
   } catch (err) {
     mostrarToast('Error guardando la configuración');
@@ -100,3 +141,4 @@ async function guardarConfiguracion(e) {
 
 document.getElementById('form-configuracion').addEventListener('submit', guardarConfiguracion);
 document.getElementById('input-logo').addEventListener('change', manejarSeleccionLogo);
+document.getElementById('input-banner-img').addEventListener('change', manejarSeleccionBannerImagen);

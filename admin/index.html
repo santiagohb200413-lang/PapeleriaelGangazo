@@ -118,6 +118,16 @@
               <input type="file" id="input-logo" accept="image/*" style="display:none">
               <button type="button" class="btn btn-secondary" id="btn-quitar-logo" style="margin-top:10px;" onclick="quitarLogo()">Quitar logo</button>
             </div>
+            <div class="field">
+              <label>Banner de imagen (promociones, temporadas como Navidad, etc.)</label>
+              <div class="img-drop" onclick="document.getElementById('input-banner-img').click()" style="aspect-ratio:unset;">
+                <div style="width:100%;aspect-ratio:16/6;border-radius:10px;overflow:hidden;background:var(--slate-tint);display:flex;align-items:center;justify-content:center;margin-bottom:10px;" id="banner-img-preview"></div>
+                <div>Click para subir banner</div>
+                <div class="img-hint">Se muestra debajo del encabezado del catálogo. Se optimiza a WebP</div>
+              </div>
+              <input type="file" id="input-banner-img" accept="image/*" style="display:none">
+              <button type="button" class="btn btn-secondary" id="btn-quitar-banner-img" style="margin-top:10px;" onclick="quitarBannerImagen()">Quitar banner</button>
+            </div>
             <div class="field"><label>Nombre del negocio</label><input type="text" id="cfg-nombre" required></div>
             <div class="field"><label>Descripción / tagline</label><input type="text" id="cfg-descripcion"></div>
             <div class="field">

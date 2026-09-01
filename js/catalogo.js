@@ -55,6 +55,12 @@ async function cargarConfiguracion() {
   document.getElementById('banner').textContent = data.mensaje_banner || '';
   document.title = data.nombre_negocio || 'Catálogo';
 
+  const metaDescripcion = document.getElementById('meta-descripcion');
+  metaDescripcion.setAttribute(
+    'content',
+    data.descripcion || `Catálogo de productos de ${data.nombre_negocio || 'nuestra tienda'}. Consulta por WhatsApp.`
+  );
+
   if (data.color_primario) {
     document.documentElement.style.setProperty('--marca', data.color_primario);
   }
@@ -62,9 +68,18 @@ async function cargarConfiguracion() {
   const logoEl = document.getElementById('logo');
   if (data.logo_url) {
     logoEl.innerHTML = `<img src="${data.logo_url}" alt="Logo">`;
+    document.getElementById('favicon').setAttribute('href', data.logo_url);
   } else {
     const iniciales = (data.nombre_negocio || 'CA').substring(0, 2).toUpperCase();
     logoEl.textContent = iniciales;
+  }
+
+  const bannerImgWrap = document.getElementById('banner-img-wrap');
+  if (data.banner_url) {
+    document.getElementById('banner-img').src = data.banner_url;
+    bannerImgWrap.style.display = 'block';
+  } else {
+    bannerImgWrap.style.display = 'none';
   }
 
   const msjGenerico = `Hola, quiero más información sobre sus productos.`;
