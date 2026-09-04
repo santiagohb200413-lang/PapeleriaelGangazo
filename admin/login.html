@@ -12,6 +12,11 @@
 </head>
 <body>
 
+<svg style="display:none">
+  <symbol id="ic-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="ic-eye-off" viewBox="0 0 24 24"><path d="M17.9 17.9A10.6 10.6 0 0112 19c-7 0-11-7-11-7a19 19 0 015.1-5.6M9.9 4.2A9.8 9.8 0 0112 4c7 0 11 7 11 7a18.6 18.6 0 01-2.5 3.4"/><path d="M9.5 9.5a3 3 0 004.2 4.2"/><line x1="2" y1="2" x2="22" y2="22"/></symbol>
+</svg>
+
 <div class="login-wrap">
   <div class="login-card">
     <div class="login-logo" id="logo">--</div>
@@ -19,7 +24,6 @@
     <div class="login-sub">Ingresa con tu correo y contraseña</div>
 
     <div class="login-error" id="login-error"></div>
-    <div class="login-error" id="recuperar-msg" style="background:var(--teal-tint);color:var(--teal-dark);"></div>
 
     <form id="form-login">
       <div class="field">
@@ -28,21 +32,14 @@
       </div>
       <div class="field">
         <label>Contraseña</label>
-        <input type="password" id="password" required autocomplete="current-password">
+        <div class="password-field">
+          <input type="password" id="password" required autocomplete="current-password">
+          <button type="button" class="password-toggle" data-target="password">
+            <svg class="icon"><use href="#ic-eye"/></svg>
+          </button>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary btn-full" id="btn-login">Ingresar</button>
-    </form>
-
-    <div style="text-align:center;margin-top:14px;">
-      <a href="#" id="link-olvide" style="font-size:12.5px;color:var(--ink-soft);text-decoration:underline;">¿Olvidaste tu contraseña?</a>
-    </div>
-
-    <form id="form-recuperar" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--paper-line);">
-      <div class="field">
-        <label>Correo para recuperar la contraseña</label>
-        <input type="email" id="email-recuperar" required>
-      </div>
-      <button type="submit" class="btn btn-secondary btn-full" id="btn-recuperar">Enviar enlace de recuperación</button>
     </form>
   </div>
 </div>
@@ -78,39 +75,8 @@
     window.location.href = 'index.html';
   });
 
-  // ---------- RECUPERAR CONTRASEÑA ----------
-  document.getElementById('link-olvide').addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('form-login').style.display = 'none';
-    document.getElementById('link-olvide').style.display = 'none';
-    document.getElementById('form-recuperar').style.display = 'block';
-  });
-
-  document.getElementById('form-recuperar').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('btn-recuperar');
-    const msg = document.getElementById('recuperar-msg');
-    const email = document.getElementById('email-recuperar').value.trim();
-
-    btn.disabled = true;
-    btn.textContent = 'Enviando...';
-
-    const { error } = await enviarRecuperacion(email);
-
-    btn.disabled = false;
-    btn.textContent = 'Enviar enlace de recuperación';
-
-    if (error) {
-      msg.style.background = 'var(--red-tint)';
-      msg.style.color = 'var(--red)';
-      msg.textContent = 'No se pudo enviar el correo. Intenta de nuevo.';
-    } else {
-      msg.style.background = 'var(--teal-tint)';
-      msg.style.color = 'var(--teal-dark)';
-      msg.textContent = 'Listo, revisa tu correo (y la carpeta de spam) para continuar.';
-      document.getElementById('form-recuperar').reset();
-    }
-    msg.style.display = 'block';
+  document.querySelectorAll('.password-toggle').forEach(btn => {
+    btn.addEventListener('click', () => alternarVisibilidadPassword(btn));
   });
 </script>
 

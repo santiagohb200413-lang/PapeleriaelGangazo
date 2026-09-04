@@ -148,8 +148,20 @@
           <div class="panel-head"><h2>Seguridad</h2></div>
           <form id="form-cambiar-password" style="padding:20px;max-width:480px;">
             <div class="field"><label>Correo de la cuenta</label><input type="text" id="sec-email" disabled></div>
-            <div class="field"><label>Nueva contraseña</label><input type="password" id="sec-password1" minlength="6" required autocomplete="new-password"></div>
-            <div class="field"><label>Confirmar nueva contraseña</label><input type="password" id="sec-password2" minlength="6" required autocomplete="new-password"></div>
+            <div class="field">
+              <label>Nueva contraseña</label>
+              <div class="password-field">
+                <input type="password" id="sec-password1" minlength="6" required autocomplete="new-password">
+                <button type="button" class="password-toggle" data-target="sec-password1"><svg class="icon"><use href="#ic-eye"/></svg></button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Confirmar nueva contraseña</label>
+              <div class="password-field">
+                <input type="password" id="sec-password2" minlength="6" required autocomplete="new-password">
+                <button type="button" class="password-toggle" data-target="sec-password2"><svg class="icon"><use href="#ic-eye"/></svg></button>
+              </div>
+            </div>
             <button type="submit" class="btn btn-secondary" id="btn-cambiar-password">Cambiar contraseña</button>
           </form>
         </div>
@@ -308,6 +320,9 @@
 <script src="js/configuracion.js"></script>
 <script>
   iniciarPanel();
+  document.querySelectorAll('.password-toggle').forEach(btn => {
+    btn.addEventListener('click', () => alternarVisibilidadPassword(btn));
+  });
 </script>
 
 </body>

@@ -32,12 +32,6 @@ async function iniciarSesion(email, password) {
   return await sb.auth.signInWithPassword({ email, password });
 }
 
-async function enviarRecuperacion(email) {
-  return await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin + '/admin/reset-password.html'
-  });
-}
-
 async function actualizarPassword(nuevaPassword) {
   return await sb.auth.updateUser({ password: nuevaPassword });
 }
@@ -45,4 +39,14 @@ async function actualizarPassword(nuevaPassword) {
 async function cerrarSesion() {
   await sb.auth.signOut();
   window.location.href = 'login.html';
+}
+
+// Muestra/oculta el texto de un campo de contraseña al hacer click en el ojito
+function alternarVisibilidadPassword(btn) {
+  const input = document.getElementById(btn.dataset.target);
+  const mostrando = input.type === 'text';
+  input.type = mostrando ? 'password' : 'text';
+  btn.innerHTML = mostrando
+    ? '<svg class="icon"><use href="#ic-eye"/></svg>'
+    : '<svg class="icon"><use href="#ic-eye-off"/></svg>';
 }
