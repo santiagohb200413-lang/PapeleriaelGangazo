@@ -35,6 +35,18 @@ function formatoPrecio(valor) {
   return '$' + Number(valor).toLocaleString('es-CO');
 }
 
+// Arma las líneas de texto de los niveles mayoristas de un producto (puede haber 0, 1 o 2)
+function lineasMayorista(p) {
+  const lineas = [];
+  if (p.precio_mayorista && p.cantidad_minima_mayorista) {
+    lineas.push(`${formatoPrecio(p.precio_mayorista)} c/u desde ${p.cantidad_minima_mayorista} und.`);
+  }
+  if (p.precio_mayorista_2 && p.cantidad_minima_mayorista_2) {
+    lineas.push(`${formatoPrecio(p.precio_mayorista_2)} c/u desde ${p.cantidad_minima_mayorista_2} und.`);
+  }
+  return lineas;
+}
+
 // ---------- CARGA DE CONFIGURACIÓN (nombre, logo, whatsapp, banner) ----------
 async function cargarConfiguracion() {
   const { data, error } = await sb
@@ -190,9 +202,9 @@ function renderizarProductos() {
       ? `<div class="card-price">${formatoPrecio(p.precio)}</div>`
       : '';
 
-    const precioMayorTexto = (p.precio_mayorista && p.cantidad_minima_mayorista)
-      ? `<div class="card-price-mayor">${formatoPrecio(p.precio_mayorista)} c/u desde ${p.cantidad_minima_mayorista} und.</div>`
-      : '';
+    const precioMayorTexto = lineasMayorista(p)
+      .map(linea => `<div class="card-price-mayor">${linea}</div>`)
+      .join('');
 
     const mensajeWa = `Hola, estoy interesado en este producto:\n\n*${p.nombre}*\n${p.precio ? formatoPrecio(p.precio) : ''}\n\n¿Podrían brindarme más información?`;
 
@@ -240,9 +252,10 @@ function abrirDetalleProducto(id) {
     (p.precio !== null && p.precio !== undefined) ? formatoPrecio(p.precio) : 'Consultar precio';
 
   const mayorFila = document.getElementById('detalle-mayor-fila');
-  if (p.precio_mayorista && p.cantidad_minima_mayorista) {
-    document.getElementById('detalle-precio-mayor').textContent =
-      `${formatoPrecio(p.precio_mayorista)} c/u comprando ${p.cantidad_minima_mayorista} unidades o más`;
+  const lineas = lineasMayorista(p);
+  if (lineas.length > 0) {
+    document.getElementById('detalle-precio-mayor').innerHTML =
+      lineas.map(l => `<div>${l}</div>`).join('');
     mayorFila.style.display = 'block';
   } else {
     mayorFila.style.display = 'none';

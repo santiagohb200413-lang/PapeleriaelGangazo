@@ -93,6 +93,8 @@ function abrirModalProducto(id = null) {
   document.getElementById('prod-precio').value = p?.precio ?? '';
   document.getElementById('prod-precio-mayorista').value = p?.precio_mayorista ?? '';
   document.getElementById('prod-cantidad-mayorista').value = p?.cantidad_minima_mayorista ?? '';
+  document.getElementById('prod-precio-mayorista-2').value = p?.precio_mayorista_2 ?? '';
+  document.getElementById('prod-cantidad-mayorista-2').value = p?.cantidad_minima_mayorista_2 ?? '';
   document.getElementById('prod-categoria').value = p?.categoria_id || '';
   document.getElementById('prod-activo').checked = p ? p.activo : true;
 
@@ -149,6 +151,8 @@ async function guardarProducto(e) {
       precio: document.getElementById('prod-precio').value ? Number(document.getElementById('prod-precio').value) : null,
       precio_mayorista: document.getElementById('prod-precio-mayorista').value ? Number(document.getElementById('prod-precio-mayorista').value) : null,
       cantidad_minima_mayorista: document.getElementById('prod-cantidad-mayorista').value ? Number(document.getElementById('prod-cantidad-mayorista').value) : null,
+      precio_mayorista_2: document.getElementById('prod-precio-mayorista-2').value ? Number(document.getElementById('prod-precio-mayorista-2').value) : null,
+      cantidad_minima_mayorista_2: document.getElementById('prod-cantidad-mayorista-2').value ? Number(document.getElementById('prod-cantidad-mayorista-2').value) : null,
       categoria_id: document.getElementById('prod-categoria').value || null,
       activo: document.getElementById('prod-activo').checked,
       imagen_url: imagenUrl
